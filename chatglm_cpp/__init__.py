@@ -14,15 +14,8 @@ class Pipeline(_C.Pipeline):
             # load ggml model
             super().__init__(str(model_path))
         else:
-            # convert hf model to ggml format
-            from chatglm_cpp.convert import convert
-
             if dtype is None:
-                dtype = "q4_0"  # default dtype
-
-            with tempfile.NamedTemporaryFile("wb") as f:
-                convert(f, model_path, dtype=dtype)
-                super().__init__(f.name)
+                raise Exception("hf model muse be ggml format")
 
     def chat(
         self,
