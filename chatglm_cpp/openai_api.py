@@ -117,7 +117,6 @@ def stream_chat(history, body):
         num_threads=settings.num_threads,
         stream=True,
     ):
-        logging.debug(f"history:{history}\nmax_length:{body.max_tokens}\ttop_p:{body.top_p}\ttemperature:{body.temperature}")
         yield ChatCompletionResponse(
             object="chat.completion.chunk",
             choices=[ChatCompletionResponseStreamChoice(delta=DeltaMessage(content=piece))],
