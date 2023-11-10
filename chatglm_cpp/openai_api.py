@@ -153,7 +153,7 @@ async def create_chat_completion(body: ChatCompletionRequest) -> ChatCompletionR
         generator = stream_chat_event_publisher(history, body)
         return EventSourceResponse(generator)
 
-    max_context_length = 512
+    max_context_length = 8192
     output = pipeline.chat(
         history=history,
         max_length=body.max_tokens,
@@ -162,7 +162,7 @@ async def create_chat_completion(body: ChatCompletionRequest) -> ChatCompletionR
         top_p=body.top_p,
         temperature=body.temperature,
     )
-    logging.info(f'prompt: "{history[-1]}", sync response: "{output}"')
+    logging.info(f'prompt: "{history}", sync response: "{output}"')
     prompt_tokens = len(pipeline.tokenizer.encode_history(history, max_context_length))
     completion_tokens = len(pipeline.tokenizer.encode(output, body.max_tokens))
 
