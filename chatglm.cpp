@@ -441,7 +441,7 @@ int get_num_physical_cores() {
     //TODO: Implement
 #endif
     unsigned int n_threads = std::thread::hardware_concurrency();
-    return n_threads > 0 ? (n_threads <= 4 ? n_threads : n_threads / 2) : 4;
+    return n_threads > 0 ? (n_threads <= 4 ? n_threads : n_threads) : 4;
 }
 
 int get_default_num_threads() {
