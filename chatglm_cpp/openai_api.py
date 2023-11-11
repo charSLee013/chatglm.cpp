@@ -144,10 +144,19 @@ async def stream_chat_event_publisher(history, body):
 
 @app.post("/v1/chat/completions")
 async def create_chat_completion(body: ChatCompletionRequest) -> ChatCompletionResponse:
-    # ignore system messages
-    history = [msg.content for msg in body.messages if msg.role != "system"]
-    if len(history) % 2 != 1:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, "invalid history size")
+    # move system messages to first
+    history = []
+    system_messages = []
+
+    for msg in body.messages:
+        if msg.role.lower() == "system":
+            system_messages.append(msg.content)
+        else:
+            history.append(msg.content)
+
+    history = system_messages + history
+    # if len(history) % 2 != 1:
+    #     raise HTTPException(status.HTTP_400_BAD_REQUEST, "invalid history size")
 
     if body.stream:
         generator = stream_chat_event_publisher(history, body)
